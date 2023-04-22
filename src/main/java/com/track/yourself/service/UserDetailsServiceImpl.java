@@ -22,8 +22,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .findByLogin(login)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with login: " + login));
 
-        System.out.println(user.getPassword());
-
         return UserDetailsImpl.build(user);
     }
 }
