@@ -11,6 +11,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import static com.track.yourself.util.Util.getParam;
+
 @Service
 public class PlanService {
     @Autowired
@@ -52,12 +54,5 @@ public class PlanService {
             plans.add(plan);
         }
         return plans;
-    }
-
-    private String getParam(String param) {
-        if (param == null) {
-            param = "";
-        }
-        return "%" + param + "%";
     }
 }

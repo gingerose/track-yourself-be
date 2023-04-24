@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Calendar;
 import java.util.Date;
 
 @RestController
@@ -30,13 +29,16 @@ public class PlansController {
         if (userRepository.findById(plan.getUser_id()).isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
         }
-        plan.setDate(new Date());
+
+        if (plan.getDate() == null)
+            plan.setDate(new Date());
+
         return ResponseEntity.ok(planRepository.save(plan));
     }
 
     @PutMapping
     public ResponseEntity<?> updatePlan(@RequestBody Plan plan) {
-        if(planRepository.findById(plan.getPlanId()).isEmpty()){
+        if (planRepository.findById(plan.getPlanId()).isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Plan not found!");
         }
         return ResponseEntity.ok(planRepository.save(plan));
@@ -44,7 +46,7 @@ public class PlansController {
 
     @DeleteMapping
     public ResponseEntity<?> deletePlan(@RequestParam Integer planId) {
-        if(planRepository.findById(planId).isEmpty()){
+        if (planRepository.findById(planId).isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Plan not found!");
         }
         planRepository.deleteById(planId);
