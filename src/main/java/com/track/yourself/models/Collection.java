@@ -7,16 +7,15 @@ import java.util.Date;
 
 @Entity
 @Data
-@Table(name = "plans")
-public class Plan {
+@Table(name = "collections")
+public class Collection {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "plan_id")
-    private Integer planId;
+    @Column(name = "collection_id")
+    private Integer collectionId;
     @Column(name = "user_id")
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
-    private Integer user_id;
-    private String description;
-    private String status;
+    private Integer userId;
+    private String title;
     private Date date;
 }
