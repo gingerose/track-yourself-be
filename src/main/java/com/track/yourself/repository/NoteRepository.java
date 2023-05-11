@@ -1,9 +1,9 @@
 package com.track.yourself.repository;
 
-import com.track.yourself.models.HabitItem;
+import com.track.yourself.models.Note;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface HabitItemRepository extends JpaRepository<HabitItem, Integer> {
+public interface NoteRepository extends JpaRepository<Note, Integer> {
 }
