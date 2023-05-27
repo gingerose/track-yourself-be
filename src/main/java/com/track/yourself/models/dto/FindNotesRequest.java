@@ -8,9 +8,10 @@ import java.util.Date;
 
 @Data
 @ToString
-public class FindCollectionsRequest {
+public class FindNotesRequest {
     private Integer userId;
     private Date firstDate;
     private Date secondDate;
     private String title;
+    private String category;
 }

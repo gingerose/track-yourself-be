@@ -1,6 +1,8 @@
 package com.track.yourself.models;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -8,6 +10,8 @@ import java.util.Date;
 @Entity
 @Data
 @Table(name = "notes")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Note {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

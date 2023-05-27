@@ -16,7 +16,8 @@ public interface CollectionItemRepository extends JpaRepository<CollectionItem, 
             FROM CollectionItem
             WHERE collectionId = ?1
             AND LOWER(description) LIKE LOWER(?2)
-            AND LOWER(status) LIKE LOWER(?3)""")
+            AND LOWER(status) LIKE LOWER(?3)
+            ORDER BY description, status""")
     List<Object[]> findLimited(Integer collectionId,
                                String description,
                                String status);

@@ -14,28 +14,27 @@ import static com.track.yourself.util.Util.getParam;
 
 @Service
 public class CollectionItemService {
-    @Autowired
-    private CollectionItemRepository collectionItemRepository;
+  @Autowired
+  private CollectionItemRepository collectionItemRepository;
+  public List<CollectionItem> searchCollectionItemsByParams(FindCollectionItemsRequest collectionItemRequest, int collectionId) {
+    collectionItemRequest.setDescription(getParam(collectionItemRequest.getDescription()));
+    collectionItemRequest.setStatus(getParam(collectionItemRequest.getStatus()));
 
-    public List<CollectionItem> searchCollectionItemsByParams(FindCollectionItemsRequest collectionItemRequest, int collectionId) {
-        collectionItemRequest.setDescription(getParam(collectionItemRequest.getDescription()));
-        collectionItemRequest.setStatus(getParam(collectionItemRequest.getStatus()));
+    List<Object[]> resultList = collectionItemRepository.findLimited(
+      collectionId,
+      collectionItemRequest.getDescription(),
+      collectionItemRequest.getStatus());
 
-        List<Object[]> resultList = collectionItemRepository.findLimited(
-                collectionId,
-                collectionItemRequest.getDescription(),
-                collectionItemRequest.getStatus());
-
-        List<CollectionItem> collectionItems = new ArrayList<>();
-        for (Object[] result : resultList) {
-            CollectionItem collectionItem = new CollectionItem(
-                    (Integer) result[0],
-                    (Integer) result[1],
-                    (String) result[2],
-                    (String) result[3]
-            );
-            collectionItems.add(collectionItem);
-        }
-        return collectionItems;
+    List<CollectionItem> collectionItems = new ArrayList<>();
+    for (Object[] result : resultList) {
+      CollectionItem collectionItem = new CollectionItem(
+        (Integer) result[0],
+        (Integer) result[1],
+        (String) result[3],
+        (String) result[2]
+      );
+      collectionItems.add(collectionItem);
     }
+    return collectionItems;
+  }
 }

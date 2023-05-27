@@ -47,10 +47,11 @@ public class PlanService {
         for (Object[] result : resultList) {
             Plan plan = new Plan();
             plan.setPlanId((Integer) result[0]);
-            plan.setUser_id((Integer) result[1]);
+            plan.setUserId((Integer) result[1]);
             plan.setDescription((String) result[2]);
             plan.setStatus((String) result[3]);
             plan.setDate((Date) result[4]);
+            plan.setDayOfWeek((Integer) result[5]);
             plans.add(plan);
         }
         return plans;

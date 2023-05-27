@@ -24,6 +24,5 @@ public interface CollectionRepository extends JpaRepository<Collection, Integer>
     List<Object[]> findLimited(Integer userId,
                                     Date firstDate,
                                     Date secondDate,
-                                    String title,
-                                    Pageable pageable);
+                                    String title);
 }

@@ -16,47 +16,41 @@ import static com.track.yourself.util.Util.*;
 
 @Service
 public class CollectionService {
-    @Autowired
-    private CollectionRepository collectionRepository;
+  @Autowired
+  private CollectionRepository collectionRepository;
 
-    public List<CollectionDto> searchCollectionsByParams(FindCollectionsRequest collectionsRequest) {
-        Date defaultDate = new Date();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(defaultDate);
-        if (collectionsRequest.getFirstDate() == null) {
-            calendar.add(Calendar.YEAR, -1);
-            collectionsRequest.setFirstDate(calendar.getTime());
-        }
-
-        if (collectionsRequest.getSecondDate() == null) {
-            calendar.add(Calendar.YEAR, 2);
-            collectionsRequest.setSecondDate(calendar.getTime());
-        }
-
-        if (collectionsRequest.getPage() == null)
-            collectionsRequest.setPage(defaultPage);
-        else if (collectionsRequest.getAmount() == null)
-            collectionsRequest.setAmount(defaultCollectionsAmount);
-
-        collectionsRequest.setTitle(getParam(collectionsRequest.getTitle()));
-
-        List<Object[]> resultList = collectionRepository.findLimited(
-                collectionsRequest.getUserId(),
-                collectionsRequest.getFirstDate(),
-                collectionsRequest.getSecondDate(),
-                collectionsRequest.getTitle(),
-                PageRequest.of(collectionsRequest.getPage(), collectionsRequest.getAmount()));
-
-        List<CollectionDto> collections = new ArrayList<>();
-        for (Object[] result : resultList) {
-            CollectionDto collectionDto = new CollectionDto(
-                    (Integer) result[0],
-                    (String) result[1],
-                    (Long) result[2],
-                    (Long) result[3]
-            );
-            collections.add(collectionDto);
-        }
-        return collections;
+  public List<CollectionDto> searchCollectionsByParams(FindCollectionsRequest collectionsRequest) {
+    Date defaultDate = new Date();
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTime(defaultDate);
+    if (collectionsRequest.getFirstDate() == null) {
+      calendar.add(Calendar.YEAR, -1);
+      collectionsRequest.setFirstDate(calendar.getTime());
     }
+
+    if (collectionsRequest.getSecondDate() == null) {
+      calendar.add(Calendar.YEAR, 2);
+      collectionsRequest.setSecondDate(calendar.getTime());
+    }
+
+    collectionsRequest.setTitle(getParam(collectionsRequest.getTitle()));
+
+    List<Object[]> resultList = collectionRepository.findLimited(
+      collectionsRequest.getUserId(),
+      collectionsRequest.getFirstDate(),
+      collectionsRequest.getSecondDate(),
+      collectionsRequest.getTitle());
+
+    List<CollectionDto> collections = new ArrayList<>();
+    for (Object[] result : resultList) {
+      CollectionDto collectionDto = new CollectionDto(
+        (Integer) result[0],
+        (String) result[1],
+        (Long) result[2],
+        (Long) result[3]
+      );
+      collections.add(collectionDto);
+    }
+    return collections;
+  }
 }

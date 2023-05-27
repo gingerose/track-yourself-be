@@ -21,84 +21,89 @@ import java.util.Date;
 @RequestMapping("/api/users/collections")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class CollectionsController {
-    @Autowired
-    private CollectionRepository collectionRepository;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private CollectionService collectionService;
-    @Autowired
-    private CollectionItemRepository collectionItemRepository;
-    @Autowired
-    private CollectionItemService collectionItemService;
+  @Autowired
+  private CollectionRepository collectionRepository;
+  @Autowired
+  private UserRepository userRepository;
+  @Autowired
+  private CollectionService collectionService;
+  @Autowired
+  private CollectionItemRepository collectionItemRepository;
+  @Autowired
+  private CollectionItemService collectionItemService;
 
-    @PostMapping
-    public ResponseEntity<?> createCollection(@RequestBody Collection collection) {
-        if (userRepository.findById(collection.getUserId()).isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
-        }
-        collection.setDate(new Date());
-        return ResponseEntity.ok(collectionRepository.save(collection));
+  @PostMapping
+  public ResponseEntity<?> createCollection(@RequestBody Collection collection) {
+    if (userRepository.findById(collection.getUserId()).isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
+    }
+    collection.setDate(new Date());
+    return ResponseEntity.ok(collectionRepository.save(collection));
+  }
+
+  @PutMapping
+  public ResponseEntity<?> updateCollection(@RequestBody Collection collection) {
+    if (collectionRepository.findById(collection.getCollectionId()).isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Collection not found!");
+    }
+    return ResponseEntity.ok(collectionRepository.save(collection));
+  }
+
+  @DeleteMapping
+  public ResponseEntity<?> deleteCollection(@RequestParam Integer collectionId) {
+    if (collectionRepository.findById(collectionId).isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Collection not found!");
+    }
+    collectionRepository.deleteById(collectionId);
+    return ResponseEntity.ok("Collection was deleted");
+  }
+
+  @PostMapping("/search")
+  public ResponseEntity<?> getCollections(@RequestBody FindCollectionsRequest findCollectionsRequest) {
+    if (userRepository.findById(findCollectionsRequest.getUserId()).isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
     }
 
-    @PutMapping
-    public ResponseEntity<?> updateCollection(@RequestBody Collection collection) {
-        if(collectionRepository.findById(collection.getCollectionId()).isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Collection not found!");
-        }
-        return ResponseEntity.ok(collectionRepository.save(collection));
+    return ResponseEntity.ok(collectionService.searchCollectionsByParams(findCollectionsRequest));
+  }
+
+  @GetMapping("/{collectionId}")
+  public ResponseEntity<?> getCollectionById(@PathVariable int collectionId) {
+    return ResponseEntity.ok(collectionRepository.findById(collectionId));
+  }
+
+  @PostMapping("/{collectionId}/items")
+  public ResponseEntity<?> createCollectionItem(@RequestBody CollectionItem collectionItem, @PathVariable int collectionId) {
+    if (collectionRepository.findById(collectionId).isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Collection not found!");
     }
 
-    @DeleteMapping
-    public ResponseEntity<?> deleteCollection(@RequestParam Integer collectionId) {
-        if(collectionRepository.findById(collectionId).isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Collection not found!");
-        }
-        collectionRepository.deleteById(collectionId);
-        return ResponseEntity.ok("Collection was deleted");
+    return ResponseEntity.ok(collectionItemRepository.save(collectionItem));
+  }
+
+  @PutMapping("/{collectionId}/items")
+  public ResponseEntity<?> updateCollectionItem(@RequestBody CollectionItem collectionItem, @PathVariable int collectionId) {
+    if (collectionRepository.findById(collectionId).isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Collection not found!");
     }
+    return ResponseEntity.ok(collectionItemRepository.save(collectionItem));
+  }
 
-    @GetMapping
-    public ResponseEntity<?> getCollections(@RequestBody FindCollectionsRequest findCollectionsRequest) {
-        if (userRepository.findById(findCollectionsRequest.getUserId()).isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
-        }
-
-        return ResponseEntity.ok(collectionService.searchCollectionsByParams(findCollectionsRequest));
+  @DeleteMapping("/{collectionId}/items")
+  public ResponseEntity<?> deleteCollectionItem(@RequestParam Integer collectionItemId, @PathVariable int collectionId) {
+    if (collectionRepository.findById(collectionId).isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Collection not found!");
     }
+    collectionItemRepository.deleteById(collectionItemId);
+    return ResponseEntity.ok("Collection Item was deleted");
+  }
 
-    @PostMapping("/{collectionId}/items")
-    public ResponseEntity<?> createCollectionItem(@RequestBody CollectionItem collectionItem, @PathVariable int collectionId) {
-        if (collectionRepository.findById(collectionId).isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Collection not found!");
-        }
-
-        return ResponseEntity.ok(collectionItemRepository.save(collectionItem));
+  @PostMapping("/{collectionId}/items/search")
+  public ResponseEntity<?> getCollectionItem(@RequestBody FindCollectionItemsRequest collectionItemsRequest,
+                                             @PathVariable int collectionId) {
+    if (collectionRepository.findById(collectionId).isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Collection not found!");
     }
-
-    @PutMapping("/{collectionId}/items")
-    public ResponseEntity<?> updateCollectionItem(@RequestBody CollectionItem collectionItem, @PathVariable int collectionId) {
-        if(collectionRepository.findById(collectionId).isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Collection not found!");
-        }
-        return ResponseEntity.ok(collectionItemRepository.save(collectionItem));
-    }
-
-    @DeleteMapping("/{collectionId}/items")
-    public ResponseEntity<?> deleteCollectionItem(@RequestParam Integer collectionItemId, @PathVariable int collectionId) {
-        if(collectionRepository.findById(collectionId).isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Collection not found!");
-        }
-        collectionItemRepository.deleteById(collectionItemId);
-        return ResponseEntity.ok("Collection Item was deleted");
-    }
-
-    @GetMapping("/{collectionId}/items")
-    public ResponseEntity<?> getCollectionItem(@RequestBody FindCollectionItemsRequest collectionItemsRequest,
-                                               @PathVariable int collectionId) {
-        if(collectionRepository.findById(collectionId).isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Collection not found!");
-        }
-        return ResponseEntity.ok(collectionItemService.searchCollectionItemsByParams(collectionItemsRequest, collectionId));
-    }
+    return ResponseEntity.ok(collectionItemService.searchCollectionItemsByParams(collectionItemsRequest, collectionId));
+  }
 }
