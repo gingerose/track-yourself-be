@@ -11,11 +11,12 @@ import java.util.List;
 @Repository
 public interface PlanRepository extends JpaRepository<Plan, Integer> {
     @Query("""
-            SELECT p.planId, p.user_id, p.description, p.status, p.date \s
+            SELECT p.planId, p.userId, p.description, p.status, p.date, p.dayOfWeek \s
             FROM Plan AS p\s
-            WHERE p.user_id = ?1 \s
+            WHERE p.userId = ?1 \s
             AND p.date BETWEEN ?2 AND ?3 \s
             AND LOWER(p.description) LIKE LOWER(?4) \s
-            AND p.status LIKE ?5""")
+            AND p.status LIKE ?5
+            ORDER BY p.dayOfWeek""")
     List<Object[]> searchPlansByParamas(Integer userId, Date startOfWeek, Date endOfWeek, String description, String status);
 }

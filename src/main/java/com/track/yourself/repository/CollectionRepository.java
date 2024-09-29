@@ -14,16 +14,15 @@ import java.util.List;
 public interface CollectionRepository extends JpaRepository<Collection, Integer> {
     @Query("""
             SELECT c.collectionId, c.title, COUNT(ci.itemId) as total_count, SUM(CASE WHEN ci.status = 'DONE' THEN 1 ELSE 0 END)\s
-            FROM Collection AS c \s
+            FROM Collection AS c 
             LEFT JOIN CollectionItem AS ci ON ci.collectionId = c.collectionId\s
-            WHERE c.userId = ?1 \s
-            AND c.date BETWEEN ?2 AND ?3 \s
-            AND LOWER(c.title) LIKE LOWER(?4) \s
-            GROUP BY c.collectionId, c.title\s
+            WHERE c.userId = ?1 
+            AND c.date BETWEEN ?2 AND ?3 
+            AND LOWER(c.title) LIKE LOWER(?4) 
+            GROUP BY c.collectionId, c.title
             ORDER BY c.title""")
     List<Object[]> findLimited(Integer userId,
                                     Date firstDate,
                                     Date secondDate,
-                                    String title,
-                                    Pageable pageable);
+                                    String title);
 }

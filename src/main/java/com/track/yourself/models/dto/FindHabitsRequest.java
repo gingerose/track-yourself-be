@@ -12,6 +12,5 @@ public class FindHabitsRequest {
     private Integer userId;
     private Integer year;
     private Integer month;
-    private Integer page;
-    private Integer amount;
+    private String title;
 }

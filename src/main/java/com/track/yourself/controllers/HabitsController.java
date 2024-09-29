@@ -43,6 +43,7 @@ public class HabitsController {
         if(habitRepository.findById(habit.getHabitId()).isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Habit not found!");
         }
+        habit.setDate(habitRepository.findById(habit.getHabitId()).get().getDate());
         return ResponseEntity.ok(habitRepository.save(habit));
     }
 
@@ -55,7 +56,7 @@ public class HabitsController {
         return ResponseEntity.ok("Habit was deleted");
     }
 
-    @GetMapping
+    @PostMapping("/search")
     public ResponseEntity<?> getHabits(@RequestBody FindHabitsRequest findHabitsRequest) {
         if (userRepository.findById(findHabitsRequest.getUserId()).isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
@@ -80,4 +81,13 @@ public class HabitsController {
         }
         return ResponseEntity.ok(habitItemRepository.save(habitItem));
     }
+
+  @DeleteMapping("/{habitId}/items")
+  public ResponseEntity<?> deleteHabitItem(@RequestParam Integer itemId, @PathVariable int habitId) {
+    if(habitRepository.findById(habitId).isEmpty()){
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Habit not found!");
+    }
+    habitItemRepository.deleteById(itemId);
+    return ResponseEntity.ok("Deleted");
+  }
 }

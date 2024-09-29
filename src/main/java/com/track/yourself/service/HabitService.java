@@ -19,49 +19,46 @@ import static com.track.yourself.util.Util.*;
 
 @Service
 public class HabitService {
-    @Autowired
-    private HabitRepository habitRepository;
+  @Autowired
+  private HabitRepository habitRepository;
 
-    public List<HabitItemDto> searchHabitsByParams(FindHabitsRequest findHabitsRequest) {
-        if (findHabitsRequest.getYear() == null) {
-            findHabitsRequest.setYear(Year.now().getValue());
-        }
-
-        if (findHabitsRequest.getMonth() == null) {
-            findHabitsRequest.setMonth(LocalDate.now().getMonth().getValue());
-        }
-
-        if (findHabitsRequest.getPage() == null)
-            findHabitsRequest.setPage(defaultPage);
-        else if (findHabitsRequest.getAmount() == null)
-            findHabitsRequest.setAmount(defaultHabitsAmount);
-
-        List<Object[]> resultList = habitRepository.findLimited(
-                findHabitsRequest.getUserId(),
-                findHabitsRequest.getYear(),
-                findHabitsRequest.getMonth(),
-                PageRequest.of(findHabitsRequest.getPage(), findHabitsRequest.getAmount()));
-
-        Map<Integer, HabitItemDto> idToHabitItemDto = new HashMap<>();
-        for (Object[] result : resultList) {
-            HabitItem habitItem = new HabitItem(
-                    (Integer) result[2],
-                    (Integer) result[0],
-                    (Date) result[4],
-                    (String) result[3]
-            );
-            if (idToHabitItemDto.get((Integer) result[0]) != null) {
-                idToHabitItemDto.get((Integer) result[0]).addToList(habitItem);
-            } else {
-                HabitItemDto habitItemDto = new HabitItemDto();
-                habitItemDto.setHabitId((Integer) result[0]);
-                habitItemDto.setTitle((String) result[1]);
-                habitItemDto.addToList(habitItem);
-                idToHabitItemDto.put(habitItemDto.getHabitId(), habitItemDto);
-            }
-        }
-
-        List<HabitItemDto> habits = new ArrayList<>(idToHabitItemDto.values());
-        return habits;
+  public List<HabitItemDto> searchHabitsByParams(FindHabitsRequest findHabitsRequest) {
+    if (findHabitsRequest.getYear() == null) {
+      findHabitsRequest.setYear(Year.now().getValue());
     }
+
+    if (findHabitsRequest.getMonth() == null) {
+      findHabitsRequest.setMonth(LocalDate.now().getMonth().getValue());
+    }
+
+    findHabitsRequest.setTitle(getParam(findHabitsRequest.getTitle()));
+
+    List<Object[]> resultList = habitRepository.findLimited(
+      findHabitsRequest.getUserId(),
+      findHabitsRequest.getYear(),
+      findHabitsRequest.getMonth(),
+      findHabitsRequest.getTitle());
+
+    Map<Integer, HabitItemDto> idToHabitItemDto = new HashMap<>();
+    for (Object[] result : resultList) {
+      HabitItem habitItem = new HabitItem(
+        (Integer) result[3],
+        (Integer) result[2],
+        (Date) result[5],
+        (String) result[4]
+      );
+      if (idToHabitItemDto.get((Integer) result[2]) != null && result[2] != null) {
+        idToHabitItemDto.get((Integer) result[2]).addToList(habitItem);
+      } else {
+        HabitItemDto habitItemDto = new HabitItemDto();
+        habitItemDto.setHabitId((Integer) result[1]);
+        habitItemDto.setTitle((String) result[0]);
+        habitItemDto.addToList(habitItem);
+        idToHabitItemDto.put(habitItemDto.getHabitId(), habitItemDto);
+      }
+    }
+
+    List<HabitItemDto> habits = new ArrayList<>(idToHabitItemDto.values());
+    return habits;
+  }
 }
