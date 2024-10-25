@@ -16,7 +16,7 @@ public interface PlansStatisticRepository extends JpaRepository<Plan, Integer> {
     SELECT new com.track.yourself.models.dto.PlansStatistic(p.status, COUNT(p.status))
     FROM Plan AS p
     WHERE p.userId = ?1
-    AND EXTRACT(YEAR FROM p.date) = ?2
+    AND EXTRACT(YEAR FROM p.creationDate) = ?2
     GROUP BY p.status""")
   List<PlansStatistic> findByYear(Integer userId, Integer year);
 
@@ -24,7 +24,7 @@ public interface PlansStatisticRepository extends JpaRepository<Plan, Integer> {
           SELECT new com.track.yourself.models.dto.PlansStatistic(p.status, COUNT(p.status))
                  FROM Plan AS p
                  WHERE p.userId = ?1
-                 AND EXTRACT(month FROM p.date) = ?2
+                 AND EXTRACT(month FROM p.creationDate) = ?2
                  GROUP BY p.status""")
   List<PlansStatistic> findByMonth(Integer userId,
                                   Integer month);

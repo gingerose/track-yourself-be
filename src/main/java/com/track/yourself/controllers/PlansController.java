@@ -33,8 +33,8 @@ public class PlansController {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
     }
 
-    if (plan.getDate() == null) {
-      plan.setDate(new Date());
+    if (plan.getCreationDate() == null) {
+      plan.setCreationDate(new Date());
 
       LocalDate currentDate = LocalDate.now();
       DayOfWeek dayOfWeek = currentDate.getDayOfWeek();

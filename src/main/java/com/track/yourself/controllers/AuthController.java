@@ -1,11 +1,14 @@
 package com.track.yourself.controllers;
 
 import com.track.yourself.configs.jwt.JwtUtils;
+import com.track.yourself.models.Collection;
+import com.track.yourself.models.CollectionItem;
 import com.track.yourself.models.User;
 import com.track.yourself.models.dto.JwtResponse;
 import com.track.yourself.models.dto.LoginRequest;
 import com.track.yourself.models.dto.MessageResponse;
 import com.track.yourself.models.dto.SignupRequest;
+import com.track.yourself.repository.CollectionItemRepository;
 import com.track.yourself.repository.UserRepository;
 import com.track.yourself.service.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.Objects;
 
 @RestController
@@ -30,6 +34,8 @@ public class AuthController {
     private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private CollectionItemRepository collectionItemRepository;
     @Autowired
     private JwtUtils jwtUtils;
 
