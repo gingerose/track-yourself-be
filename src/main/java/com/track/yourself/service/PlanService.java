@@ -48,10 +48,14 @@ public class PlanService {
             Plan plan = new Plan();
             plan.setPlanId((Integer) result[0]);
             plan.setUserId((Integer) result[1]);
-            plan.setDescription((String) result[2]);
-            plan.setStatus((String) result[3]);
-            plan.setCreationDate((Date) result[4]);
-            plan.setDayOfWeek((Integer) result[5]);
+            plan.setName((String) result[2]);
+            plan.setDescription((String) result[3]);
+            plan.setStatus((String) result[4]);
+            plan.setCreationDate((Date) result[5]);
+            plan.setDayOfWeek((Integer) result[6]);
+            plan.setPriority((String) result[7]);
+            plan.setDuration((Integer) result[8]);
+            plan.setDeadline((Date) result[9]);
             plans.add(plan);
         }
         return plans;

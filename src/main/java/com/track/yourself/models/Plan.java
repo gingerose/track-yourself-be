@@ -1,6 +1,7 @@
 package com.track.yourself.models;
 
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.DateTimeException;
@@ -10,6 +11,7 @@ import java.util.Date;
 @Entity
 @Data
 @Table(name = "plans")
+@ToString
 public class Plan {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,4 +32,5 @@ public class Plan {
   private LocalDateTime modifyDate;
   private Integer duration;
   private Date deadline;
+  private String decomposition;
 }

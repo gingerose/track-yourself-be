@@ -59,7 +59,13 @@ public class PlansController {
     if (planRepository.findById(plan.getPlanId()).isEmpty()) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Plan not found!");
     }
+    System.out.println(plan);
     return ResponseEntity.ok(planRepository.save(plan));
+  }
+
+  @GetMapping
+  public ResponseEntity<?> getPlanById(@RequestParam Integer planId) {
+    return ResponseEntity.ok(planRepository.findById(planId));
   }
 
   @DeleteMapping

@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface PlanRepository extends JpaRepository<Plan, Integer> {
     @Query("""
-            SELECT p.planId, p.userId, p.description, p.status, p.creationDate, p.dayOfWeek \s
+            SELECT p.planId, p.userId, p.name, p.description, p.status, p.creationDate, p.dayOfWeek, p.priority, p.duration, p.deadline \s
             FROM Plan AS p\s
             WHERE p.userId = ?1 \s
             AND p.creationDate BETWEEN ?2 AND ?3 \s
